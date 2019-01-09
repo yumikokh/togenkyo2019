@@ -6,7 +6,7 @@ const settings = readConfig("src/const/settings.yaml");
 
 module.exports = {
   lintOnSave: false,
-  baseUrl: settings.base_path,
+  publicPath: settings.base_path,
   outputDir: `${settings.output_dir}/${settings.base_path}`,
   pages: {
     index: {
