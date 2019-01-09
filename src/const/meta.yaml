@@ -1,0 +1,18 @@
+title: タイトル
+description: ディスクリプション
+keywords: [キーワード,キーワード2]
+
+#TODO: 本番でだしわける
+url: https://sample.com
+ogp_image_url: https://sample.com
+#url: https://sample.com
+#ogp_image_url: https://sample.com
+
+ogp_image_width: 1200
+ogp_image_height: 630
+
+
+favicon_url: /favicon.ico
+# webclipicon_url: /webclipicon.png
+# facebook_app_id: 
+

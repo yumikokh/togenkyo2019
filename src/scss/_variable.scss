@@ -1,0 +1,22 @@
+/*----------  size  ----------*/
+
+$sp-width: 750px;
+$sp-inner-width: 640px;
+$pc-max-width: 1960px;
+$pc-min-width: 1020px;
+$pc-min-height: 680px;
+$pc-inner-width: 880px;
+$unit: 8px;
+$pc-scale: 0.5;
+
+/*----------  font  ----------*/
+
+/*----------  z-index  ----------*/
+$layer: menu, modal;
+
+/*----------  color  ----------*/
+
+
+/*----------  transition  ----------*/
+$good-ease: cubic-bezier(0.215, 0.61, 0.355, 1);
+$ease-in-out: cubic-bezier(0.700, 0.000, 0.300, 1.000);
