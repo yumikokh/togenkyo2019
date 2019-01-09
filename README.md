@@ -1,5 +1,8 @@
 # vue-starter
 
+This project is customized for my own usecase. 
+Based on [Vue CLI 3](https://cli.vuejs.org/config/)
+
 ## Project setup
 ```
 npm install
@@ -7,7 +10,7 @@ npm install
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+npm start
 ```
 
 ### Compiles and minifies for production
@@ -15,15 +18,7 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
-
 ### Lints and fixes files
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
