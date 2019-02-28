@@ -6,7 +6,7 @@
 <script>
 import _ from "lodash";
 import audioList from "./audioList";
-// import pianoList from "./const/pianoList";
+import pianoList from "./const/pianoList";
 
 export default {
   name: "app",
@@ -35,6 +35,7 @@ export default {
     }
   },
   mounted() {
+    // ユーザーアクション対策：初回すべての音をだしておく
     window.addEventListener("click", () => {
       _.each(audioList, audio => {
         this.audios[audio.id] = new Audio();
@@ -47,6 +48,7 @@ export default {
       });
     });
 
+    // MIDI
     const device = {};
     const vue = this;
     function requestSuccess(data) {
@@ -75,6 +77,7 @@ export default {
       console.error("error!!!", error);
     }
 
+    // midi入力時
     function inputEvent(e) {
       if (vue.nowPlaying) return;
       const d = device.outputs;
@@ -83,23 +86,21 @@ export default {
       event.data.forEach(function(val) {
         numArray.push(("00" + val.toString(16)).substr(-2));
       });
-      const message = numArray.join(" ");
-
+      const message = numArray;
       // InputしたDeviceに結果を送信する
       d.send(e.data);
-
       // 離すときはカウントしない
-      if (message.slice(0, 2) === "80") return;
-      // 2桁の16進数を表示
-      console.log(message);
-      vue.temp.push(message);
-    }
-
+      if (message[0] === "80") return;
+      const soundName = _.findKey(
+        pianoList,
+        piano => String(piano) === message[1]
+      );
+      vue.temp.push(soundName);
+    } // MIDI初期化
     navigator.requestMIDIAccess().then(requestSuccess, requestError);
   },
   watch: {
     temp: function(temp) {
-      console.log(temp, "temp");
       if (temp.length > 3) {
         this.temp = temp.slice(-1);
         return;
