@@ -8,6 +8,8 @@ import _ from "lodash";
 import audioList from "./audioList";
 import pianoList from "./const/pianoList";
 
+console.log(audioList);
+
 export default {
   name: "app",
   data: () => ({
@@ -17,6 +19,7 @@ export default {
   }),
   methods: {
     startAudio(id = 1) {
+      console.log("start audio", id);
       if (id !== "bgm") this.nowPlaying = true;
       const audio = this.audios[id];
       audio.currentTime = 0;
@@ -78,6 +81,8 @@ export default {
     }
 
     // midi入力時
+    let timer;
+    const RESET_LIFE = 2000;
     function inputEvent(e) {
       if (vue.nowPlaying) return;
       const d = device.outputs;
@@ -96,17 +101,21 @@ export default {
         piano => String(piano) === message[1]
       );
       vue.temp.push(soundName);
+      if (timer) {
+        clearTimeout(timer);
+        timer = null;
+      }
+      timer = setTimeout(() => {
+        vue.temp = []; // reset
+      }, RESET_LIFE);
     } // MIDI初期化
     navigator.requestMIDIAccess().then(requestSuccess, requestError);
   },
   watch: {
     temp: function(temp) {
-      if (temp.length > 3) {
-        this.temp = temp.slice(-1);
-        return;
-      }
+      const tempAry = [...temp];
       _.each(audioList, audio => {
-        if (_.isEqual(temp, audio.commands)) {
+        if (_.includes(tempAry.join(""), audio.commands.join(""))) {
           this.startAudio(audio.id);
           return;
         }
