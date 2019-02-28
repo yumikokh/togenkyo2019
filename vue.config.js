@@ -59,6 +59,7 @@ module.exports = {
       alias: {
         // - NOTE: @なしだとcompile errorになる
         "@img": path.join(__dirname, "src/assets/images"),
+        "@audio": path.join(__dirname, "src/assets/audio"),
         "@scss-modules": path.join(__dirname, "src/scss/_common.scss")
       }
     }
