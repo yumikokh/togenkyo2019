@@ -1,6 +1,6 @@
 <template lang="pug">
   #app
-    .list {{ temp }}
+    video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video")
 </template>
 
 <script>
@@ -40,6 +40,7 @@ export default {
   mounted() {
     // ユーザーアクション対策：初回すべての音をだしておく
     window.addEventListener("click", () => {
+      this.$refs.video.play();
       _.each(audioList, audio => {
         this.audios[audio.id] = new Audio();
         this.audios[audio.id].src = `/audio/${audio.filename}.wav`;
@@ -133,11 +134,18 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  margin: 0;
+}
 #app {
   @include base-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.video {
+  width: 942px;
 }
 </style>
