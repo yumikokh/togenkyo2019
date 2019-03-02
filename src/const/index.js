@@ -1,16 +1,4 @@
-import meta from "@/const/meta.yaml";
-
 export const PRODUCTION = process.env.NODE_ENV === "production";
 
-// シェア文言
-export const SHARE_TEXT = {
-  all: {
-    text: "",
-    hashtags: "",
-    url: meta.url
-  },
-  user: {
-    text: "",
-    hashtags: ""
-  }
-};
+export const tanbarinSound = ["do", "do2", "do3", "so", "so2"];
+export const drumSound = ["re", "re2", "fa", "fa2"];

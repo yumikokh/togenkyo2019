@@ -3,18 +3,36 @@
       .container
         video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video" muted)
         ul.images
-            li(v-for="(song, i) in songs" v-show="nowPlaying == i+1")
+          li(v-for="(song, i) in songs" :data-show="nowPlaying == i+1")
+        ul.tanbarin
+          li(v-for="(circle, i) in circles" :data-show="tanbarin == circle")
+            video.video(:src="`/movie/circle/${circle}.mp4`"  playsinline  muted autoplay :ref="'tanbarin-'+circle" preload)
+        ul.drum
+          li(v-for="(circle, i) in circles" :data-show="drum == circle")
+            video.video(:src="`/movie/circle/${circle}.mp4`" playsinline muted autoplay :ref="'drum-'+circle" preload)
+          
 </template>
 
 <script>
 import _ from "lodash";
-import audioList from "./audioList";
+import audioList from "./const/audioList";
+import circleList from "./const/circleList";
 import pianoList from "./const/pianoList";
+import { tanbarinSound, drumSound } from "./const";
 
 export default {
   name: "app",
   computed: {
-    songs: () => new Array(10)
+    songs: () => new Array(10),
+    circles: () => circleList,
+    tanbarin: function() {
+      if (!this.nowPlaying) return false;
+      return audioList[this.nowPlaying].tanbarin;
+    },
+    drum: function() {
+      if (!this.nowPlaying) return false;
+      return audioList[this.nowPlaying].drum;
+    }
   },
   data: () => ({
     temp: [],
@@ -52,9 +70,17 @@ export default {
         this.audios[audio.id] = new Audio();
         this.audios[audio.id].src = `/audio/${audio.filename}.wav`;
         this.audios[audio.id].play();
+
         setTimeout(() => {
           this.audios[audio.id].pause();
           this.startAudio("bgm");
+        }, 500);
+      });
+      _.each(document.getElementsByClassName("video"), async video => {
+        console.log(video);
+        await video.play();
+        setTimeout(() => {
+          // video.pause();
         }, 500);
       });
     });
@@ -92,7 +118,6 @@ export default {
     let timer;
     const RESET_LIFE = 2000;
     function inputEvent(e) {
-      if (vue.nowPlaying) return;
       const d = device.outputs;
       const numArray = [];
       // 2桁の16進数にして表示する
@@ -108,6 +133,16 @@ export default {
         pianoList,
         piano => String(piano) === message[1]
       );
+      if (vue.nowPlaying) {
+        // 再生中はエジェクトだす
+        if (_.includes(tanbarinSound, soundName)) {
+          vue.$refs[`tanbarin-${vue.tanbarin}`][0].play();
+        }
+        if (_.includes(drumSound, soundName)) {
+          vue.$refs[`drum-${vue.drum}`][0].play();
+        }
+        return;
+      }
       vue.temp.push(soundName);
       if (timer) {
         clearTimeout(timer);
@@ -173,6 +208,38 @@ export default {
   }
   > li {
     @include abs-fill;
+  }
+}
+
+.tanbarin {
+  position: absolute;
+  width: 140px;
+  height: 140px;
+  right: 6px;
+  top: 230px;
+  background: #fff;
+  > li {
+    position: absolute;
+    opacity: 0;
+    &[data-show] {
+      opacity: 1;
+    }
+  }
+}
+
+.drum {
+  position: absolute;
+  width: 280px;
+  height: 290px;
+  right: 200px;
+  top: 470px;
+  background: #fff;
+  > li {
+    position: absolute;
+    opacity: 0;
+    &[data-show] {
+      opacity: 1;
+    }
   }
 }
 </style>
