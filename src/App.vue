@@ -1,6 +1,9 @@
 <template lang="pug">
   #app
-    video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video" muted)
+      .container
+        video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video" muted)
+        ul.images
+            li(v-for="(song, i) in songs" v-show="nowPlaying == i+1")
 </template>
 
 <script>
@@ -10,6 +13,9 @@ import pianoList from "./const/pianoList";
 
 export default {
   name: "app",
+  computed: {
+    songs: () => new Array(10)
+  },
   data: () => ({
     temp: [],
     audios: {},
@@ -19,7 +25,7 @@ export default {
   methods: {
     startAudio(id = 1) {
       console.log("start audio", id);
-      if (id !== "bgm") this.nowPlaying = true;
+      if (id !== "bgm") this.nowPlaying = id;
       const audio = this.audios[id];
       audio.currentTime = 0;
       audio.play().catch(er => {
@@ -118,7 +124,6 @@ export default {
       const tempAry = [...temp];
       if (tempAry.length > 4) {
         const id = _.random(1, 10, false);
-        console.log(id, "id");
         this.startAudio(id);
       }
       // _.each(audioList, audio => {
@@ -140,16 +145,34 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  margin: 0;
-}
+@import "reset-css";
+
 #app {
   @include base-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.video {
+.container {
+  position: relative;
   width: 942px;
+}
+.video {
+  width: 100%;
+}
+
+.images {
+  @include abs-fill;
+  width: 791px;
+  height: 397px;
+  @for $i from 1 through 10 {
+    > li:nth-child(#{$i}) {
+      background: url(/images/bg/song-#{$i}.jpg) center no-repeat;
+      background-size: cover;
+    }
+  }
+  > li {
+    @include abs-fill;
+  }
 }
 </style>
