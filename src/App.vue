@@ -1,6 +1,6 @@
 <template lang="pug">
   #app
-    video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video")
+    video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video" muted)
 </template>
 
 <script>
@@ -8,20 +8,20 @@ import _ from "lodash";
 import audioList from "./audioList";
 import pianoList from "./const/pianoList";
 
-console.log(audioList);
-
 export default {
   name: "app",
   data: () => ({
     temp: [],
     audios: {},
-    nowPlaying: false
+    nowPlaying: false,
+    hasSetup: false
   }),
   methods: {
     startAudio(id = 1) {
       console.log("start audio", id);
       if (id !== "bgm") this.nowPlaying = true;
       const audio = this.audios[id];
+      console.log(audio, "audio");
       audio.currentTime = 0;
       audio.play().catch(er => {
         console.log(er, "error");
@@ -40,6 +40,8 @@ export default {
   mounted() {
     // ユーザーアクション対策：初回すべての音をだしておく
     window.addEventListener("click", () => {
+      if (this.hasSetup) return;
+      this.hasSetup = true;
       this.$refs.video.play();
       _.each(audioList, audio => {
         this.audios[audio.id] = new Audio();
@@ -115,12 +117,17 @@ export default {
   watch: {
     temp: function(temp) {
       const tempAry = [...temp];
-      _.each(audioList, audio => {
-        if (_.includes(tempAry.join(""), audio.commands.join(""))) {
-          this.startAudio(audio.id);
-          return;
-        }
-      });
+      if (tempAry.length > 4) {
+        const id = _.random(1, 10, false);
+        console.log(id, "id");
+        this.startAudio(id);
+      }
+      // _.each(audioList, audio => {
+      //   if (_.includes(tempAry.join(""), audio.commands.join(""))) {
+      //     this.startAudio(audio.id);
+      //     return;
+      //   }
+      // });
     },
     nowPlaying: function(nowPlaying) {
       if (nowPlaying) {
@@ -141,8 +148,6 @@ body {
   @include base-font-family;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
 }
 
 .video {
