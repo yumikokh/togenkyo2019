@@ -5,10 +5,10 @@
         ul.images
           li(v-for="(song, i) in songs" :data-show="nowPlaying == i+1")
         ul.tanbarin
-          li(v-for="(circle, i) in circles" :data-show="tanbarin == circle")
+          li.fb-item(v-for="(circle, i) in circles" :data-show="tanbarin == circle")
             video.video(:src="`/movie/circle/${circle}.mp4`"  playsinline  muted autoplay :ref="'tanbarin-'+circle" preload)
         ul.drum
-          li(v-for="(circle, i) in circles" :data-show="drum == circle")
+          li.fb-item(v-for="(circle, i) in circles" :data-show="drum == circle")
             video.video(:src="`/movie/circle/${circle}.mp4`" playsinline muted autoplay :ref="'drum-'+circle" preload)
           
 </template>
@@ -187,6 +187,13 @@ export default {
 .container {
   position: relative;
   width: 942px;
+  @for $i from 1 through 10 {
+    &[data-song="#{$i}"] {
+      .fb-item::after {
+        background-color: nth($themeColor, $i);
+      }
+    }
+  }
 }
 .video {
   width: 100%;
