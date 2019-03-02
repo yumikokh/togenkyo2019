@@ -21,7 +21,6 @@ export default {
       console.log("start audio", id);
       if (id !== "bgm") this.nowPlaying = true;
       const audio = this.audios[id];
-      console.log(audio, "audio");
       audio.currentTime = 0;
       audio.play().catch(er => {
         console.log(er, "error");
