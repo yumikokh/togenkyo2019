@@ -31,7 +31,7 @@ export default {
     id: 5,
     filename: "05_tengoku",
     commands: ["fa", "so", "ra"],
-    tanbarin: "panRotate",
+    tanbarin: "pan-rotate",
     drum: "gokaku"
   },
   6: {
@@ -39,7 +39,7 @@ export default {
     filename: "06_kaeru",
     commands: ["fa", "so", "ra"],
     tanbarin: "ban",
-    drum: "rotate"
+    drum: "pan-rotate"
   },
   7: {
     id: 7,
@@ -53,7 +53,7 @@ export default {
     filename: "08_hurusato",
     commands: ["fa", "so", "ra"],
     tanbarin: "ban",
-    drum: "rotate"
+    drum: "pan-rotate"
   },
   9: {
     id: 9,

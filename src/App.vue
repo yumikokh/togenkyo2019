@@ -77,11 +77,7 @@ export default {
         }, 500);
       });
       _.each(document.getElementsByClassName("video"), async video => {
-        console.log(video);
         await video.play();
-        setTimeout(() => {
-          // video.pause();
-        }, 500);
       });
     });
 

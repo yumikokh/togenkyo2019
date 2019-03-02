@@ -3,5 +3,5 @@ export default {
   gokaku: "gokaku",
   line: "line",
   pan: "pan",
-  panRotate: "pan-rotate"
+  "pan-rotate": "pan-rotate"
 };
