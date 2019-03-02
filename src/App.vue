@@ -1,6 +1,6 @@
 <template lang="pug">
   #app
-      .container
+      .container(:data-song="nowPlaying")
         video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video" muted)
         ul.images
           li(v-for="(song, i) in songs" :data-show="nowPlaying == i+1")
@@ -220,6 +220,12 @@ export default {
     &[data-show] {
       opacity: 1;
     }
+
+    &::after {
+      content: "";
+      @include abs-fill;
+      mix-blend-mode: color;
+    }
   }
 }
 
@@ -235,6 +241,11 @@ export default {
     opacity: 0;
     &[data-show] {
       opacity: 1;
+    }
+    &::after {
+      content: "";
+      @include abs-fill;
+      mix-blend-mode: color;
     }
   }
 }

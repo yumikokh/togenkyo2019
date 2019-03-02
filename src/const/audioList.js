@@ -20,6 +20,13 @@ export default {
     tanbarin: "line",
     drum: "gokaku"
   },
+  3: {
+    id: 3,
+    filename: "03_believe",
+    commands: ["fa", "so", "ra"],
+    tanbarin: "line",
+    drum: "gokaku"
+  },
   4: {
     id: 4,
     filename: "04_sekaiju",
