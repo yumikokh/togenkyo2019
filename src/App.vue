@@ -47,36 +47,42 @@ export default {
   }),
   methods: {
     startAudio(id = 1) {
-      if (id !== "bgm") this.nowPlaying = id;
+      if (id !== "bgm") {
+        this.nowPlaying = id;
+        this.$refs["bg-bgm"].pause();
+      }
       const audio =
         id === "bgm" ? this.$refs["bg-bgm"] : this.$refs[`bg-${id}`][0];
       audio.currentTime = 0;
       audio.play().catch(er => {
         console.log(er, "error");
       });
-      audio.addEventListener("ended", () => {
-        console.log("ended");
-        if (id === "bgm") {
-          audio.currentTime = 0;
-          audio.play();
-        } else {
-          this.nowPlaying = false;
-        }
-      });
     }
   },
   mounted() {
     // ユーザーアクション対策：初回すべての音をだしておく
     window.addEventListener("click", () => {
-      if (this.hasSetup) return;
+      if (this.hasSetup) {
+        // debug用
+        // const id = _.random(1, 10, false);
+        // this.startAudio(id);
+        return;
+      }
       this.hasSetup = true;
       _.each(document.getElementsByClassName("video"), async video => {
         await video.play();
         if (!video.classList.contains("bgm")) {
+          // BGMじゃないとき
           video.pause();
-        } else {
-          console.log("bgm start");
           video.addEventListener("ended", () => {
+            console.log("ended");
+            this.nowPlaying = false;
+            this.startAudio("bgm");
+          });
+        } else {
+          video.addEventListener("ended", () => {
+            // BGMのとき
+            console.log("bgm start");
             video.currentTime = 0;
             video.play();
           });
@@ -159,13 +165,6 @@ export default {
       if (tempAry.length > 4) {
         const id = _.random(1, 10, false);
         this.startAudio(id);
-      }
-    },
-    nowPlaying: function(nowPlaying) {
-      if (nowPlaying) {
-        this.$refs["bg-bgm"].pause();
-      } else {
-        this.startAudio("bgm");
       }
     }
   }
