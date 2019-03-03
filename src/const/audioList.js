@@ -15,7 +15,7 @@ export default {
   },
   2: {
     id: 2,
-    filename: "02_greengreen",
+    filename: "02_green",
     commands: ["fa", "so", "ra"],
     tanbarin: "line",
     drum: "gokaku"
