@@ -222,7 +222,7 @@ export default {
   position: absolute;
   width: 140px;
   height: 140px;
-  right: 6px;
+  right: -10px;
   top: 230px;
   background: #fff;
   > li {
