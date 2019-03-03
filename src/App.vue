@@ -165,7 +165,7 @@ export default {
   watch: {
     temp: function(temp) {
       const tempAry = [...temp];
-      if (tempAry.length > 4) {
+      if (tempAry.length > 2) {
         const id = _.random(1, 10, false);
         this.startAudio(id);
       }
