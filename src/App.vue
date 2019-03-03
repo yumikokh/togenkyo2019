@@ -184,6 +184,8 @@ export default {
 .container {
   position: relative;
   width: 942px;
+  transform: scale(0.9);
+  transform-origin: top left;
   @for $i from 1 through 10 {
     &[data-song="#{$i}"] {
       .fb-item::after {
