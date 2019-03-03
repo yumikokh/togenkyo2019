@@ -1,9 +1,12 @@
 <template lang="pug">
   #app
       .container(:data-song="nowPlaying")
-        video.video(src="/movie/00_BGM.mp4" type="video/mp4" loop playsinline ref="video" muted)
+        img.bg(src="/bg.png")
         ul.images
+          li(:data-show="!nowPlaying")
+            video.video.bgm(src="/movie/00_BGM.mp4" playsinline ref="bg-bgm")
           li(v-for="(song, i) in songs" :data-show="nowPlaying == i+1")
+            video.video(:src="`/movie/${audioList[i+1].filename}.mp4`" playsinline :ref="'bg-'+Number(i+1)")
         ul.tanbarin
           li.fb-item(v-for="(circle, i) in circles" :data-show="tanbarin == circle")
             video.video(:src="`/movie/circle/${circle}.mp4`"  playsinline  muted autoplay :ref="'tanbarin-'+circle" preload)
@@ -19,10 +22,12 @@ import audioList from "./const/audioList";
 import circleList from "./const/circleList";
 import pianoList from "./const/pianoList";
 import { tanbarinSound, drumSound } from "./const";
+// import wait from "@/utils/wait"
 
 export default {
   name: "app",
   computed: {
+    audioList: () => audioList,
     songs: () => new Array(10),
     circles: () => circleList,
     tanbarin: function() {
@@ -42,9 +47,9 @@ export default {
   }),
   methods: {
     startAudio(id = 1) {
-      console.log("start audio", id);
       if (id !== "bgm") this.nowPlaying = id;
-      const audio = this.audios[id];
+      const audio =
+        id === "bgm" ? this.$refs["bg-bgm"] : this.$refs[`bg-${id}`][0];
       audio.currentTime = 0;
       audio.play().catch(er => {
         console.log(er, "error");
@@ -65,19 +70,17 @@ export default {
     window.addEventListener("click", () => {
       if (this.hasSetup) return;
       this.hasSetup = true;
-      this.$refs.video.play();
-      _.each(audioList, audio => {
-        this.audios[audio.id] = new Audio();
-        this.audios[audio.id].src = `/audio/${audio.filename}.wav`;
-        this.audios[audio.id].play();
-
-        setTimeout(() => {
-          this.audios[audio.id].pause();
-          this.startAudio("bgm");
-        }, 500);
-      });
       _.each(document.getElementsByClassName("video"), async video => {
         await video.play();
+        if (!video.classList.contains("bgm")) {
+          video.pause();
+        } else {
+          console.log("bgm start");
+          video.addEventListener("ended", () => {
+            video.currentTime = 0;
+            video.play();
+          });
+        }
       });
     });
 
@@ -157,16 +160,10 @@ export default {
         const id = _.random(1, 10, false);
         this.startAudio(id);
       }
-      // _.each(audioList, audio => {
-      //   if (_.includes(tempAry.join(""), audio.commands.join(""))) {
-      //     this.startAudio(audio.id);
-      //     return;
-      //   }
-      // });
     },
     nowPlaying: function(nowPlaying) {
       if (nowPlaying) {
-        this.audios.bgm.pause();
+        this.$refs["bg-bgm"].pause();
       } else {
         this.startAudio("bgm");
       }
@@ -195,6 +192,9 @@ export default {
     }
   }
 }
+.bg {
+  width: 100%;
+}
 .video {
   width: 100%;
 }
@@ -211,6 +211,10 @@ export default {
   }
   > li {
     @include abs-fill;
+    opacity: 0;
+    &[data-show] {
+      opacity: 1;
+    }
   }
 }
 
