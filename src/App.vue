@@ -43,6 +43,7 @@ export default {
     temp: [],
     audios: {},
     nowPlaying: false,
+    prevPlaying: false,
     hasSetup: false
   }),
   methods: {
@@ -64,7 +65,7 @@ export default {
     window.addEventListener("click", () => {
       if (this.hasSetup) {
         // debug用
-        // const id = _.random(1, 10, false);
+        // const id = this.prevPlaying+1 > 10 ? 1 : this.prevPlaying+1;
         // this.startAudio(id);
         return;
       }
@@ -79,6 +80,7 @@ export default {
           video.pause();
           video.addEventListener("ended", () => {
             console.log("ended");
+            this.prevPlaying = this.nowPlaying;
             this.nowPlaying = false;
             this.startAudio("bgm");
           });
@@ -166,7 +168,7 @@ export default {
     temp: function(temp) {
       const tempAry = [...temp];
       if (tempAry.length > 2) {
-        const id = _.random(1, 10, false);
+        const id = this.prevPlaying + 1 > 10 ? 1 : this.prevPlaying + 1;
         this.startAudio(id);
       }
     }
