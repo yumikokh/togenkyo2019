@@ -9,10 +9,10 @@
             video.video(:src="`/movie/${audioList[i+1].filename}.mp4`" playsinline :ref="'bg-'+Number(i+1)")
         ul.tanbarin
           li.fb-item(v-for="(circle, i) in circles" :data-show="tanbarin == circle")
-            video.video(:src="`/movie/circle/${circle}.mp4`"  playsinline  muted autoplay :ref="'tanbarin-'+circle" preload)
+            video.video.circle(:src="`/movie/circle/${circle}.mp4`"  playsinline  muted autoplay :ref="'tanbarin-'+circle" preload)
         ul.drum
           li.fb-item(v-for="(circle, i) in circles" :data-show="drum == circle")
-            video.video(:src="`/movie/circle/${circle}.mp4`" playsinline muted autoplay :ref="'drum-'+circle" preload)
+            video.video.circle(:src="`/movie/circle/${circle}.mp4`" playsinline muted autoplay :ref="'drum-'+circle" preload)
           
 </template>
 
@@ -71,7 +71,10 @@ export default {
       this.hasSetup = true;
       _.each(document.getElementsByClassName("video"), async video => {
         await video.play();
-        if (!video.classList.contains("bgm")) {
+        if (
+          !video.classList.contains("bgm") &&
+          !video.classList.contains("circle")
+        ) {
           // BGMじゃないとき
           video.pause();
           video.addEventListener("ended", () => {
@@ -79,7 +82,7 @@ export default {
             this.nowPlaying = false;
             this.startAudio("bgm");
           });
-        } else {
+        } else if (video.classList.contains("bgm")) {
           video.addEventListener("ended", () => {
             // BGMのとき
             console.log("bgm start");
